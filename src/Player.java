@@ -1,5 +1,5 @@
 // import the API.
-// See xxx for the javadocs.
+// See https://s3.amazonaws.com/battlecode-2018/api/java/bc/package-summary.html for the javadocs.
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class Player {
         System.out.println("Opposite of " + Direction.North + ": " + bc.bcDirectionOpposite(Direction.North));
 
         // Connect to the manager, starting the game
-       GameController gc = new GameController();
+        GameController gc = new GameController();
        
      
         while (true) {
@@ -39,66 +39,75 @@ public class Player {
             gc.nextTurn();
         }
     }
+    
+    // Ordered clockwise, does not include Direction.Center
     Direction[] directions = {Direction.North, Direction.Northeast, Direction.East, Direction.Southeast, Direction.South, Direction.Southwest, Direction.West, Direction.Northwest};
-    public Direction RotateLeft(Direction initial){
+    
+    public Direction RotateLeft(Direction initial) {
    		if (initial == Direction.North) return Direction.Northwest;
-   		for (int i=1; i<=8;i++){
+   		for (int i=1; i<=8;i++) {
    			if (directions[i] == initial){
    				return directions[i-=1];
    			}
-   		} return Direction.North;
+   		} 
+        return Direction.North;
    	}
-   	public Direction RotateRight(Direction initial){
+    
+   	public Direction RotateRight(Direction initial) {
    		if (initial == Direction.Northwest) return Direction.North;
-   		for (int i=0; i<8;i++){
-   			if (directions[i] == initial){
+   		for (int i=0; i<8;i++) {
+   			if (directions[i] == initial) {
    				return directions[i++];
    			}
-   		} return Direction.North;
+   		} 
+        return Direction.North;
    	}
-       public void goThere(Unit Robot, MapLocation Destination, GameController gc){
-    	   while (gc.isMoveReady(Robot.id())){
-    		   if (gc.canMove(Robot.id(), Robot.location().mapLocation().directionTo(Destination))){
-    			   gc.moveRobot(Robot.id(), Robot.location().mapLocation().directionTo(Destination));
-    		   }
-    	   }
-       }
-       
+    
+    public void goThere(Unit Robot, MapLocation Destination, GameController gc) {
+        while (gc.isMoveReady(Robot.id())) {
+            if (gc.canMove(Robot.id(), Robot.location().mapLocation().directionTo(Destination))) {
+                gc.moveRobot(Robot.id(), Robot.location().mapLocation().directionTo(Destination));
+            }
+        }
+    }
+   
 
-       /*
-       public LinkedList flutterPath (Unit Robot, MapLocation Destination, int maxlength, GameController gc){
-   		list<MapLocation> path = new LinkedList();
-   		MapLocation temp = Robot.mapLocation();
-   		path.add(temp);
-   		int n = 0;
-   		while (temp.equals(Destination) == false& n <= maxlength){
-   			if (gc.isOccupiable(temp.add(temp.directionTo(Destination)))==true){
-   				temp = temp.add(temp.directionTo(Destination));
-   				path.add(temp);
-   			} else if (gc.isOccupiable(temp.add(RotateRight(temp.directionTo(Destination)))==true)){
-   				temp = temp.add(RotateRight(temp.directionTo(Destination)));
-   				path.add(temp);
-   			} else if (gc.isOccupiable(temp.add(RotateLeft(temp.directionTo(Destination)))==true)){
-   				temp = temp.add(RotateLeft(temp.directionTo(Destination)));
-   				path.add(temp);
-   			} else if (gc.isOccupiable(temp.add(RotateRight(RotateRight(temp.directionTo(Destination))))==true)){
-   				temp = temp.add(RotateRight(RotateRight(temp.directionTo(Destination))));
-   				path.add(temp);
-   			} else if (gc.isOccupiable(temp.add(RotateLeft(RotateLeft(temp.directionTo(Destination))))==true)){
-   				temp = temp.add(RotateLeft(RotateLeft(temp.directionTo(Destination))));
-   				path.add(temp);
-   			} else if (gc.isOccupiable(temp.add(RotateRight(RotateRight(temp.directionTo(Destination))))==true)){
-   				temp = temp.add(RotateRight(RotateRight(temp.directionTo(Destination))));
-   				path.add(temp);
-   			}else if (gc.isOccupiable(temp.add(RotateRight(RotateRight(RotateRight(temp.directionTo(Destination)))))==true)){
-   				temp = temp.add(RotateRight(RotateRight(RotateRight(temp.directionTo(Destination)))));
-   				path.add(temp);
-   			}else if (gc.isOccupiable(temp.add(RotateLeft(RotateLeft(RotateLeft(temp.directionTo(Destination)))))==true)){
-   				temp = temp.add(RotateRight(RotateRight(RotateR(temp.directionTo(Destination)))));
-   				path.add(temp);
-   			} else return null;
-   			n++;
-   			}  if (n==maxlength) return null;
-   			return path;
-       } */
+    /*
+    public LinkedList flutterPath (Unit Robot, MapLocation Destination, int maxlength, GameController gc) {
+    list<MapLocation> path = new LinkedList();
+    MapLocation temp = Robot.mapLocation();
+    path.add(temp);
+    int n = 0;
+    while (temp.equals(Destination) == false& n <= maxlength) {
+        if (gc.isOccupiable(temp.add(temp.directionTo(Destination)))==true){
+            temp = temp.add(temp.directionTo(Destination));
+            path.add(temp);
+        } else if (gc.isOccupiable(temp.add(RotateRight(temp.directionTo(Destination)))==true)) {
+            temp = temp.add(RotateRight(temp.directionTo(Destination)));
+            path.add(temp);
+        } else if (gc.isOccupiable(temp.add(RotateLeft(temp.directionTo(Destination)))==true)) {
+            temp = temp.add(RotateLeft(temp.directionTo(Destination)));
+            path.add(temp);
+        } else if (gc.isOccupiable(temp.add(RotateRight(RotateRight(temp.directionTo(Destination))))==true)) {
+            temp = temp.add(RotateRight(RotateRight(temp.directionTo(Destination))));
+            path.add(temp);
+        } else if (gc.isOccupiable(temp.add(RotateLeft(RotateLeft(temp.directionTo(Destination))))==true)) {
+            temp = temp.add(RotateLeft(RotateLeft(temp.directionTo(Destination))));
+            path.add(temp);
+        } else if (gc.isOccupiable(temp.add(RotateRight(RotateRight(temp.directionTo(Destination))))==true)) {
+            temp = temp.add(RotateRight(RotateRight(temp.directionTo(Destination))));
+            path.add(temp);
+        }else if (gc.isOccupiable(temp.add(RotateRight(RotateRight(RotateRight(temp.directionTo(Destination)))))==true)) {
+            temp = temp.add(RotateRight(RotateRight(RotateRight(temp.directionTo(Destination)))));
+            path.add(temp);
+        }else if (gc.isOccupiable(temp.add(RotateLeft(RotateLeft(RotateLeft(temp.directionTo(Destination)))))==true)) {
+            temp = temp.add(RotateRight(RotateRight(RotateR(temp.directionTo(Destination)))));
+            path.add(temp);
+        } else return null;
+        n++;
+        }  
+        
+        if (n==maxlength) return null;
+        return path;
+    } */
 }
