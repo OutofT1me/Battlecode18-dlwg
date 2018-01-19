@@ -9,30 +9,26 @@ public class Player {
 
     public static void main(String[] args) {
 
-        // Starts game and initializes processes
         GameController gc = new GameController();
-        queueUpgrades(gc);
+        initialize(gc);
 
         while (true) {
             System.out.println("Current round: "+gc.round());
 
+            // Runs proper control methods for each unit on the board
             VecUnit units = gc.myUnits();
             for (int i = 0; i < units.size(); i++) {
                 Unit unit = units.get(i);
-
-                // Most methods on gc take unit IDs, instead of the unit objects themselves.
-                if (gc.isMoveReady(unit.id()) && gc.canMove(unit.id(), Direction.Southeast)) {
-                    gc.moveRobot(unit.id(), Direction.Southeast);
-                }
+                if (unit.unitType().equals(UnitType.Worker)) RobotControl.workerControl(unit, gc);
+                else if (unit.unitType().equals(UnitType.Factory)) StructureControl.factoryControl(unit, gc);
             }
 
-            // Submit the actions we've done, and wait for our next turn.
             gc.nextTurn();
         }
     }
 
-    // Queues upgrades at the start of the game
-    public static void queueUpgrades(GameController gc) {
+    // Makes initial preparations for game
+    public static void initialize(GameController gc) {
 
         // For most important units
         for (int lvl = 1; lvl <= 3; lvl++) {
@@ -50,24 +46,7 @@ public class Player {
         }
         gc.queueResearch(UnitType.Mage); // Extra Mage lvl4 upgrade
 
-    }
-    
-    // Generates a basic path for a robot
-    // Gets blocked by obstacles, so don't use in its current state
-    public LinkedList basicPath(Unit robot, MapLocation Destination, GameController gc) {
-        LinkedList<MapLocation> path = new LinkedList();
-        MapLocation currentLoc = robot.location().mapLocation();
-        path.add(currentLoc);
-        int pathLength = 0;
-        while (!currentLoc.equals(Destination)) {
-            if (gc.isOccupiable(currentLoc.add(currentLoc.directionTo(Destination))) > 0){
-                currentLoc = currentLoc.add(currentLoc.directionTo(Destination));
-                path.add(currentLoc);
-            }
-            else return null;
-            pathLength++;
-        }
-
-        return path;
+        // Registers initial number of workers
+        gc.writeTeamArray(6, (int)gc.myUnits().size());
     }
 }
