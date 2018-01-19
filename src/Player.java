@@ -1,3 +1,5 @@
+package src;
+
 // import the API.
 // See https://s3.amazonaws.com/battlecode-2018/api/java/bc/package-summary.html for the javadocs.
 import java.util.*;
